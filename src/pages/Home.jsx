@@ -2,6 +2,7 @@ import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { addDoc, collection } from "firebase/firestore";
+import ExerciseCard from "../components/ExerciseCard";
 
 export default function Home() {
   const { currentUser } = useAuth();
@@ -39,7 +40,8 @@ export default function Home() {
   return (
     <div>
       <p>current user: {currentUser?.email}</p>
-
+      <p>current user: {currentUser?.password}</p>
+      <ExerciseCard />
       <button onClick={handleAddExercise}>
         Adicionar Exercício de Exemplo
       </button>

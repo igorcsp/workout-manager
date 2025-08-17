@@ -23,29 +23,31 @@ export default function Login() {
   };
 
   return (
-    <div>
-      <h2>Página de Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Senha"
-          required
-        />
-        <button type="submit">Entrar</button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
-      <p>
-        Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
-      </p>
+    <div className="login-container">
+      <div className="login-card">
+        <h2>Página de Login</h2>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Senha"
+            required
+          />
+          <button type="submit">Entrar</button>
+          {error && <p className="login-error">{error}</p>}
+        </form>
+        <p>
+          Não tem uma conta? <Link to="/register">Cadastre-se</Link>
+        </p>
+      </div>
     </div>
   );
 }

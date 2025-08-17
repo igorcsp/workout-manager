@@ -37,36 +37,38 @@ export default function RegisterPage() {
   };
 
   return (
-    <div>
-      <h2>Página de Cadastro</h2>
-      <form onSubmit={handleRegister}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Senha"
-          required
-        />
-        <div>
-          <label>Eu sou:</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="usuario">Usuário</option>
-            <option value="personal">Personal Trainer</option>
-          </select>
-        </div>
-        <button type="submit">Cadastrar</button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
-      <p>
-        Já tem uma conta? <Link to="/login">Faça Login</Link>
-      </p>
+    <div className="register-container">
+      <div className="register-card">
+        <h2>Página de Cadastro</h2>
+        <form onSubmit={handleRegister}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Senha"
+            required
+          />
+          <div>
+            <label>Eu sou:</label>
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="usuario">Usuário</option>
+              <option value="personal">Personal Trainer</option>
+            </select>
+          </div>
+          <button type="submit">Cadastrar</button>
+          {error && <p className="register-error">{error}</p>}
+        </form>
+        <p>
+          Já tem uma conta? <Link to="/login">Faça Login</Link>
+        </p>
+      </div>
     </div>
   );
 }

@@ -1,15 +1,63 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/config";
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBar() {
+  const { currentUser } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Erro ao fazer logout", error);
+    }
+  };
   return (
     <nav className="navbar">
       <div className="navbar-brand">
-        <h1>Workout Manager</h1>
+        <h1>
+          <Link to="/">Workout Manager</Link>
+        </h1>
       </div>
       <div className="navbar-links">
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/exercises">Exercises</NavLink>
-        <NavLink href="/workouts">Workouts</NavLink>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "active" : ""
+          }
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "active" : ""
+          }
+        >
+          Sobre
+        </NavLink>
+        {currentUser ? (
+          <NavLink
+            to="/profile"
+            className={({ isActive, isPending }) =>
+              isPending ? "pending" : isActive ? "active" : ""
+            }
+          >
+            Perfil
+          </NavLink>
+        ) : (
+          ""
+        )}
+
+        {currentUser ? (
+          <Link to="/" onClick={handleLogout}>
+            Sair
+          </Link>
+        ) : (
+          ""
+        )}
       </div>
     </nav>
   );
