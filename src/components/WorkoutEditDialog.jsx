@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
-  Button
-} from '@mui/material';
+  Button,
+} from "@mui/material";
 
-const WorkoutEditDialog = ({ open, workout, onClose, onSave }) => {
-  const [title, setTitle] = useState('');
+export default function WorkoutEditDialog({ open, workout, onClose, onSave }) {
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     if (workout) {
-      setTitle(workout.title || '');
+      setTitle(workout.title || "");
     } else {
-      setTitle('');
+      setTitle("");
     }
   }, [workout]);
 
@@ -27,9 +27,7 @@ const WorkoutEditDialog = ({ open, workout, onClose, onSave }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <form onSubmit={handleSubmit}>
-        <DialogTitle>
-          {workout ? 'Editar Treino' : 'Novo Treino'}
-        </DialogTitle>
+        <DialogTitle>{workout ? "Editar Treino" : "Novo Treino"}</DialogTitle>
         <DialogContent>
           <TextField
             fullWidth
@@ -44,12 +42,10 @@ const WorkoutEditDialog = ({ open, workout, onClose, onSave }) => {
         <DialogActions>
           <Button onClick={onClose}>Cancelar</Button>
           <Button type="submit" variant="contained">
-            {workout ? 'Salvar' : 'Criar'}
+            {workout ? "Salvar" : "Criar"}
           </Button>
         </DialogActions>
       </form>
     </Dialog>
   );
-};
-
-export default WorkoutEditDialog;
+}

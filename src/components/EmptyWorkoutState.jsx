@@ -1,8 +1,7 @@
-import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { FitnessCenter as FitnessCenterIcon } from "@mui/icons-material";
 
-const EmptyWorkoutState = ({ onCreateWorkout }) => {
+export default function EmptyWorkoutState({ onCreateWorkout }) {
   return (
     <Box
       display="flex"
@@ -27,6 +26,4 @@ const EmptyWorkoutState = ({ onCreateWorkout }) => {
       </Button>
     </Box>
   );
-};
-
-export default EmptyWorkoutState;
+}

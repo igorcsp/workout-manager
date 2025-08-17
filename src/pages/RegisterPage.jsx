@@ -19,7 +19,6 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      // CORREÇÃO AQUI: A função espera apenas (auth, email, password)
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -29,9 +28,9 @@ export default function RegisterPage() {
 
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
-        name: name,       // Pega o nome do state
-        email: user.email,  // Pega o email do objeto de autenticação
-        role: role,       // Pega o papel do state
+        name: name,
+        email: user.email,
+        role: role,
       });
 
       navigate("/");

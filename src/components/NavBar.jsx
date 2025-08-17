@@ -17,7 +17,7 @@ export default function NavBar() {
     <nav className="navbar">
       <div className="navbar-brand">
         <h1>
-          <Link to="/">Workout Manager (betinha)</Link>
+          <Link to="/">Workout Manager (beta)</Link>
         </h1>
       </div>
       <div className="navbar-links">

@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Typography, Box } from '@mui/material';
+import { useState, useEffect, useCallback } from "react";
+import { Typography, Box } from "@mui/material";
 
-const Timer = ({ 
-  onExpire, 
-  autoStart = false, 
-  restTime = 60 // tempo em segundos
-}) => {
+export default function Timer({
+  onExpire,
+  autoStart = false,
+  restTime = 60,
+}) {
   const [timeLeft, setTimeLeft] = useState(restTime);
   const [isActive, setIsActive] = useState(autoStart);
 
@@ -30,7 +30,7 @@ const Timer = ({
   // Lógica principal do timer
   useEffect(() => {
     let interval = null;
-    
+
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((prevTime) => {
@@ -55,21 +55,23 @@ const Timer = ({
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   return (
     <Box
       sx={{
-        backgroundColor: isActive ? 'primary.main' : 'grey.300',
-        color: isActive ? 'white' : 'text.primary',
+        backgroundColor: isActive ? "primary.main" : "grey.300",
+        color: isActive ? "white" : "text.primary",
         px: 1.5,
         py: 0.5,
         borderRadius: 1,
         minWidth: 60,
-        textAlign: 'center',
-        transition: 'all 0.3s ease',
-        boxShadow: isActive ? 1 : 0
+        textAlign: "center",
+        transition: "all 0.3s ease",
+        boxShadow: isActive ? 1 : 0,
       }}
     >
       <Typography variant="body2" fontWeight="bold">
@@ -77,6 +79,4 @@ const Timer = ({
       </Typography>
     </Box>
   );
-};
-
-export default Timer;
+}

@@ -12,12 +12,13 @@ import AboutPage from "./pages/AboutPage.jsx";
 import Settings from "./pages/Settings.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import NotFound from "./pages/NotFound.jsx";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2196F3",
-      light: "#64B5F6",
+      main: "#06345aff",
+      light: "#141a68ff",
       dark: "#1976D2",
     },
     secondary: {
@@ -26,12 +27,12 @@ const theme = createTheme({
       dark: "#FF5722",
     },
     background: {
-      default: "#f8f9fa",
-      paper: "#ffffff",
+      default: "#d4d4d4ff",
+      paper: "#cacacaff",
     },
   },
   typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Fira Sans Condensed", sans-serif',
     h4: {
       fontWeight: 600,
       fontSize: "2rem",
@@ -50,7 +51,7 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.23)",
           borderRadius: 12,
         },
       },
@@ -93,7 +94,7 @@ createRoot(document.getElementById("root")).render(
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
-              <Route path="*" element={<p>Not Found</p>} />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>

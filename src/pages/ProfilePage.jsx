@@ -4,6 +4,7 @@ export default function ProfilePage() {
       <p>proifle pics?</p>
       <p>before after?</p>
       <p>evolution stats</p>
+      <p>editar nome, email, senha</p>
     </>
   );
 }

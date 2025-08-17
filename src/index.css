@@ -2,10 +2,10 @@
 
 /* Globais */
 :root {
-  --main-bg-color: #727272;
-  --bg-exercise: #9285dd;
+  --main-bg-color: #808080;
+  --bg-exercise: #6145ff;
   --letter: #fff;
-  --letter-footer: #d1d1d1;
+  --letter-footer: #353535;
   --bg-timer: #0a84ff;
   --font: "Fira Sans Condensed", sans-serif;
 }

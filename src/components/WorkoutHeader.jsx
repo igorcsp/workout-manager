@@ -1,26 +1,18 @@
 import { useState } from "react";
-import {
-  Box,
-  IconButton,
-  Typography,
-  Menu,
-  MenuItem,
-  Button,
-} from "@mui/material";
+import { Box, IconButton, Typography, Menu, MenuItem } from "@mui/material";
 import {
   Add as AddIcon,
   MoreVert as MoreIcon,
-  PlayArrow as PlayIcon,
 } from "@mui/icons-material";
 import ExerciseEditDialog from "./ExerciseEditDialog";
 import WorkoutEditDialog from "./WorkoutEditDialog";
 
-const WorkoutHeader = ({
+export default function WorkoutHeader({
   workout,
   onAddExercise,
   onUpdateWorkout,
   onDeleteWorkout,
-}) => {
+}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [exerciseDialogOpen, setExerciseDialogOpen] = useState(false);
   const [workoutDialogOpen, setWorkoutDialogOpen] = useState(false);
@@ -72,15 +64,12 @@ const WorkoutHeader = ({
         </Box>
 
         <Box display="flex" gap={1}>
-          <Button variant="contained" startIcon={<PlayIcon />} color="primary">
-            Iniciar Treino
-          </Button>
-
           <IconButton
             onClick={() => setExerciseDialogOpen(true)}
             color="primary"
           >
-            <AddIcon />
+            <AddIcon />{" "}
+            <span style={{ fontSize: "1rem" }}>adicionar exercício</span>
           </IconButton>
 
           <IconButton onClick={handleMenuOpen}>
@@ -119,6 +108,4 @@ const WorkoutHeader = ({
       />
     </>
   );
-};
-
-export default WorkoutHeader;
+}
