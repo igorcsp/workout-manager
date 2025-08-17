@@ -350,3 +350,245 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 0.8rem;
 }
+
+/* styles/workouts.css - Estilos adicionais para o sistema de workouts */
+
+/* Estilo para os cards de exercício durante drag */
+.exercise-card-dragging {
+  transform: rotate(2deg) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Estilo para as tabs durante drag */
+.tab-dragging {
+  background-color: rgba(25, 118, 210, 0.08) !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Container do timer */
+.timer-container {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(45deg, #2196F3 30%, #21CBF3 90%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-width: 60px;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.timer-container.inactive {
+  background: #e0e0e0;
+  color: #757575;
+}
+
+/* Animação para os checkboxes das séries */
+.series-checkbox {
+  transition: all 0.3s ease;
+}
+
+.series-checkbox.completed {
+  background-color: #4caf50 !important;
+  color: white;
+}
+
+/* Card do exercício com melhor visual */
+.exercise-card-enhanced {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.exercise-card-enhanced:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-color: #2196F3;
+}
+
+/* Header do workout com gradiente sutil */
+.workout-header {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+/* Tabs personalizadas */
+.custom-tabs {
+  background: white;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.custom-tab {
+  min-height: 48px;
+  text-transform: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.custom-tab:hover {
+  background-color: rgba(25, 118, 210, 0.04);
+}
+
+/* Estado vazio com melhor visual */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  border-radius: 16px;
+  color: white;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.empty-state h5 {
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.empty-state p {
+  opacity: 0.9;
+  margin-bottom: 24px;
+}
+
+/* Botão flutuante customizado */
+.custom-fab {
+  background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+  box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+  transition: all 0.3s ease;
+}
+
+.custom-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+}
+
+/* Indicador de drag */
+.drag-indicator {
+  cursor: grab;
+  color: #bdbdbd;
+  transition: color 0.2s ease;
+}
+
+.drag-indicator:hover {
+  color: #757575;
+}
+
+.drag-indicator:active {
+  cursor: grabbing;
+}
+
+/* Chip de peso personalizado */
+.weight-chip {
+  background: linear-gradient(45deg, #4CAF50, #45A049);
+  color: white;
+  font-weight: 600;
+  border-radius: 16px;
+}
+
+/* Loading spinner customizado */
+.custom-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .workout-header {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .exercise-card-enhanced {
+    margin-bottom: 12px;
+  }
+  
+  .custom-tabs .MuiTabs-flexContainer {
+    justify-content: flex-start;
+  }
+  
+  .custom-tab {
+    min-width: 120px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Animações para entrada/saída */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Melhorias na acessibilidade */
+.accessible-focus:focus {
+  outline: 2px solid #2196F3;
+  outline-offset: 2px;
+}
+
+/* Indicadores visuais para estados de drag */
+.drop-zone-active {
+  background-color: rgba(33, 150, 243, 0.1);
+  border: 2px dashed #2196F3;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.drop-zone-hover {
+  background-color: rgba(33, 150, 243, 0.2);
+  border-color: #1976D2;
+}
+
+/* Menu de contexto personalizado */
+.custom-menu {
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.custom-menu-item {
+  padding: 12px 16px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-menu-item:hover {
+  background-color: #f5f5f5;
+}
