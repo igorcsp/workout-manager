@@ -3,7 +3,7 @@
 /* Globais */
 :root {
   --main-bg-color: #727272;
-  --bg-exercise: #7c7cc4;
+  --bg-exercise: #9285dd;
   --letter: #fff;
   --letter-footer: #d1d1d1;
   --bg-timer: #0a84ff;
@@ -174,7 +174,7 @@ body {
 }
 
 .register-card button:hover {
-  background: #006fe6;
+  background: var(--bg-timer);
 }
 
 .register-card p {

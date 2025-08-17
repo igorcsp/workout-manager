@@ -1,6 +1,7 @@
 import { Switch, Checkbox } from "@mui/material";
 import { useState } from "react";
 import Timer from "./Timer";
+import EditIcon from "@mui/icons-material/Edit";
 
 const data = {
   title: "Flexão de braços",
@@ -48,8 +49,13 @@ export default function ExerciseCard() {
   return (
     <div className="exercise-card">
       <div className="exercise-card-header">
-        <h2>{data.title}</h2>
-        <Switch checked={checkedSwitch} />
+        <div>
+          <h2>{data.title}</h2>
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Switch checked={checkedSwitch} />
+          <EditIcon />
+        </div>
       </div>
 
       <div className="exercise-card-main">
@@ -64,7 +70,7 @@ export default function ExerciseCard() {
             />
           ))}
         </div>
-        <div className="exercise-weight">Carga: {data.weight}kg</div>
+        <div className="exercise-weight">Carga {data.weight} Kg</div>
       </div>
 
       <div className="exercise-card-info">

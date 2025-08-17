@@ -1,30 +1,21 @@
-import { signOut } from "firebase/auth";
-import { auth, db } from "../firebase/config";
+import { db } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { addDoc, collection } from "firebase/firestore";
 import ExerciseCard from "../components/ExerciseCard";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-export default function Home() {
+export default function Workouts() {
   const { currentUser } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Erro ao fazer logout", error);
-    }
-  };
-
   const handleAddExercise = async () => {
-    // Exemplo de dados do exercício
     const exerciseData = {
       title: "Flexão de braços",
-      weight: 0, // Flexão não usa peso
+      weight: 0,
       series: 4,
       repetitions: 15,
-      restTime: 60, // em segundos
+      restTime: 60,
       observations: "Mantenha a postura correta durante o exercício.",
-      createdBy: currentUser.uid, // Associa o exercício ao usuário logado
+      createdBy: currentUser.uid,
     };
 
     try {
@@ -39,14 +30,12 @@ export default function Home() {
 
   return (
     <div>
-      <p>current user: {currentUser?.email}</p>
-      <p>current user: {currentUser?.password}</p>
+      <p>Bem-vindo, {currentUser.name.split(" ")[0]}!</p>
       <ExerciseCard />
+      <AddCircleIcon />
       <button onClick={handleAddExercise}>
         Adicionar Exercício de Exemplo
       </button>
-      <br />
-      <button onClick={handleLogout}>Sair</button>
     </div>
   );
 }

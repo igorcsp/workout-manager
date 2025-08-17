@@ -1,3 +1,9 @@
 export default function ProfilePage() {
-  return <h1>ProfilePage</h1>;
+  return (
+    <>
+      <p>proifle pics?</p>
+      <p>before after?</p>
+      <p>evolution stats</p>
+    </>
+  );
 }

@@ -28,7 +28,7 @@ export default function NavBar() {
             isPending ? "pending" : isActive ? "active" : ""
           }
         >
-          Home
+          Treino
         </NavLink>
         <NavLink
           to="/about"
@@ -50,7 +50,6 @@ export default function NavBar() {
         ) : (
           ""
         )}
-
         {currentUser ? (
           <Link to="/" onClick={handleLogout}>
             Sair

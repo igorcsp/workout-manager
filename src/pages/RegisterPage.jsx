@@ -1,3 +1,5 @@
+// src/pages/RegisterPage.jsx
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -5,9 +7,10 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/config";
 
 export default function RegisterPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("usuario"); // Papel padrão
+  const [role, setRole] = useState("usuario");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -16,6 +19,7 @@ export default function RegisterPage() {
     setError("");
 
     try {
+      // CORREÇÃO AQUI: A função espera apenas (auth, email, password)
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -25,13 +29,18 @@ export default function RegisterPage() {
 
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
-        email: user.email,
-        role: role,
+        name: name,       // Pega o nome do state
+        email: user.email,  // Pega o email do objeto de autenticação
+        role: role,       // Pega o papel do state
       });
 
       navigate("/");
     } catch (err) {
-      setError("Falha ao criar a conta. Verifique os dados e tente novamente.");
+      if (err.code === 'auth/email-already-in-use') {
+        setError("Este email já está em uso.");
+      } else {
+        setError("Falha ao criar a conta. Verifique os dados.");
+      }
       console.error(err);
     }
   };
@@ -41,6 +50,13 @@ export default function RegisterPage() {
       <div className="register-card">
         <h2>Página de Cadastro</h2>
         <form onSubmit={handleRegister}>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nome"
+            required
+          />
           <input
             type="email"
             value={email}
