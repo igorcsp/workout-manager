@@ -1,0 +1,99 @@
+/* Globais */
+:root {
+  --main-bg-color: #727272;
+  --bg-exercise: #7c7cc4;
+  --letter: #fff;
+  --letter-footer: #d1d1d1;
+  --bg-timer: #0a84ff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--main-bg-color);
+  color: var(--letter);
+}
+
+/* Card principal */
+.exercise-card {
+  background: var(--bg-exercise);
+  color: var(--letter);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1rem auto;
+  max-width: 400px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.exercise-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exercise-card-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* Parte principal */
+.exercise-card-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exercise-series {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.exercise-weight {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Infos extras */
+.exercise-card-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exercise-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Timer */
+.timer {
+  background: var(--bg-timer);
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  min-width: 70px;
+  text-align: center;
+}
+
+.timer-display {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--letter);
+  letter-spacing: 1px;
+}
+
+/* Footer */
+.exercise-card-footer {
+  font-size: 0.9rem;
+  color: var(--letter-footer);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.8rem;
+}
