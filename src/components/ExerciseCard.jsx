@@ -1,94 +1,258 @@
-import { Switch, Checkbox } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Switch,
+  Checkbox,
+  IconButton,
+  Box,
+  Chip,
+} from "@mui/material";
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  DragIndicator as DragIcon,
+} from "@mui/icons-material";
 import Timer from "./Timer";
-import EditIcon from "@mui/icons-material/Edit";
+import ExerciseEditDialog from "./ExerciseEditDialog";
+import sound from "../assets/timerSound.mp3";
 
-const data = {
-  title: "Flexão de braços",
-  weight: 8,
-  series: 4,
-  repetitions: 8,
-  restTime: 2,
-  observations: "Mantenha a postura correta durante o exercício.",
-};
-
-export default function ExerciseCard() {
-  const [checkedSwitch, setCheckedSwitch] = useState(false);
+export default function ExerciseCard({
+  exercise,
+  workoutId,
+  dragHandleProps,
+  onUpdate,
+  onDelete,
+  isDragging,
+}) {
+  const [completed, setCompleted] = useState(false);
   const [currentSeries, setCurrentSeries] = useState(0);
   const [completedSeries, setCompletedSeries] = useState([]);
-  const [timerKey, setTimerKey] = useState(0);
   const [timerActive, setTimerActive] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [timerKey, setTimerKey] = useState(0);
+
+  useEffect(() => {
+    resetExercise();
+  }, [exercise.id]);
+
+  const resetExercise = () => {
+    setCompleted(false);
+    setCurrentSeries(0);
+    setCompletedSeries([]);
+    setTimerActive(false);
+    setTimerKey((prev) => prev + 1);
+  };
 
   const handleCheckboxClick = (index) => {
-    if (index === currentSeries && !timerActive) {
-      setCompletedSeries((prev) => [...prev, index]);
+    if (index !== currentSeries || timerActive || completed) {
+      return;
+    }
 
-      if (index < data.series - 1) {
-        setTimerActive(true);
-        setTimerKey((prev) => prev + 1);
-      } else {
-        setCheckedSwitch(true);
-      }
+    const newCompletedSeries = [...completedSeries, index];
+    setCompletedSeries(newCompletedSeries);
+
+    if (index < exercise.sets - 1) {
+      setTimerActive(true);
+      setTimerKey((prev) => prev + 1);
+    } else {
+      setCompleted(true);
+      setTimerActive(false);
     }
   };
 
   const handleTimerExpire = () => {
+    console.log("Timer expirou!");
+    new Audio(sound).play();
+    if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
     setTimerActive(false);
 
-    if (currentSeries < data.series - 1) {
-      setCurrentSeries((prev) => prev + 1);
+    const nextSeries = currentSeries + 1;
+    if (nextSeries < exercise.sets) {
+      setCurrentSeries(nextSeries);
     }
   };
 
-  const getExpiryTime = () => {
-    const time = new Date();
-    time.setSeconds(time.getSeconds() + data.restTime);
-    return time;
+  const handleEdit = (updatedExercise) => {
+    onUpdate(workoutId, exercise.id, updatedExercise);
+    setEditOpen(false);
+  };
+
+  const handleDelete = () => {
+    if (
+      window.confirm(
+        `Tem certeza que deseja excluir o exercício "${exercise.name}"?`
+      )
+    ) {
+      onDelete(workoutId, exercise.id);
+    }
+  };
+
+  const handleSwitchChange = (event) => {
+    if (event.target.checked) {
+      setCompleted(true);
+      setCompletedSeries(Array.from({ length: exercise.sets }, (_, i) => i));
+      setCurrentSeries(exercise.sets - 1);
+      setTimerActive(false);
+    } else {
+      resetExercise();
+    }
   };
 
   return (
-    <div className="exercise-card">
-      <div className="exercise-card-header">
-        <div>
-          <h2>{data.title}</h2>
-        </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Switch checked={checkedSwitch} />
-          <EditIcon />
-        </div>
-      </div>
+    <>
+      <Card
+        elevation={isDragging ? 8 : 2}
+        sx={{
+          opacity: isDragging ? 0.8 : 1,
+          transform: isDragging ? "rotate(2deg)" : "none",
+          transition: "all 0.2s ease",
+          mb: 2,
+          border: completed ? "2px solid" : "1px solid",
+          borderColor: completed ? "success.main" : "divider",
+        }}
+      >
+        <CardContent>
+          {/* Header */}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={2}
+          >
+            <Box display="flex" alignItems="center" gap={1}>
+              <IconButton {...dragHandleProps} size="small">
+                <DragIcon />
+              </IconButton>
+              <Typography variant="h6">{exercise.name}</Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Switch
+                checked={completed}
+                onChange={handleSwitchChange}
+                color="success"
+              />
+              <IconButton onClick={() => setEditOpen(true)} size="small">
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={handleDelete} size="small" color="error">
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          </Box>
 
-      <div className="exercise-card-main">
-        <div className="exercise-series">
-          <span>Séries:</span>
-          {Array.from({ length: data.series }).map((_, i) => (
-            <Checkbox
-              key={i}
-              checked={completedSeries.includes(i)}
-              disabled={i > currentSeries || timerActive}
-              onChange={() => handleCheckboxClick(i)}
-            />
-          ))}
-        </div>
-        <div className="exercise-weight">Carga {data.weight} Kg</div>
-      </div>
+          {/* Series */}
+          <Box
+            display="flex"
+            alignItems="center"
+            gap={1}
+            mb={2}
+            flexWrap="wrap"
+          >
+            <Typography variant="body2" sx={{ minWidth: 50 }}>
+              Séries:
+            </Typography>
+            {Array.from({ length: exercise.sets || 1 }).map((_, i) => {
+              const isCompleted = completedSeries.includes(i);
+              const isCurrent = i === currentSeries;
+              const isDisabled = i > currentSeries || timerActive || completed;
 
-      <div className="exercise-card-info">
-        <span>Repetições: {data.repetitions}</span>
-        <div className="exercise-timer">
-          <span>Descanso:</span>
-          <Timer
-            key={timerKey}
-            expiryTimestamp={getExpiryTime()}
-            onExpire={handleTimerExpire}
-            autoStart={timerActive}
-          />
-        </div>
-      </div>
+              return (
+                <Checkbox
+                  key={i}
+                  checked={isCompleted}
+                  disabled={isDisabled}
+                  onChange={() => handleCheckboxClick(i)}
+                  size="small"
+                  sx={{
+                    color: isCompleted
+                      ? "success.main"
+                      : isCurrent
+                      ? "primary.main"
+                      : "default",
+                    "&.Mui-checked": {
+                      color: "success.main",
+                    },
+                    "&.Mui-disabled": {
+                      opacity: 0.5,
+                    },
+                    border: isCurrent && !isCompleted ? "2px solid" : "none",
+                    borderColor: "primary.main",
+                    borderRadius: "4px",
+                  }}
+                />
+              );
+            })}
+          </Box>
 
-      <div className="exercise-card-footer">
-        Observações: {data.observations}
-      </div>
-    </div>
+          {(exercise.weight || 0) > 0 && (
+            <Box mb={2}>
+              <Chip
+                label={`${exercise.weight} kg`}
+                variant="outlined"
+                size="small"
+                color="primary"
+              />
+            </Box>
+          )}
+
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={2}
+          >
+            <Typography variant="body2">
+              Repetições: {exercise.reps || 0}
+            </Typography>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Typography variant="body2">Descanso:</Typography>
+              <Timer
+                key={`${exercise.id}-${timerKey}`}
+                restTime={exercise.rest || 60}
+                onExpire={handleTimerExpire}
+                autoStart={timerActive}
+              />
+            </Box>
+          </Box>
+
+          {timerActive && (
+            <Box mb={2}>
+              <Chip
+                label={`Descansando após série ${currentSeries + 1}`}
+                size="small"
+                color="info"
+                variant="outlined"
+              />
+            </Box>
+          )}
+
+          {completed && (
+            <Box mb={2}>
+              <Chip
+                label="Exercício concluído!"
+                size="small"
+                color="success"
+                variant="filled"
+              />
+            </Box>
+          )}
+
+          {exercise.obs && (
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              {exercise.obs}
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+
+      <ExerciseEditDialog
+        open={editOpen}
+        exercise={exercise}
+        onClose={() => setEditOpen(false)}
+        onSave={handleEdit}
+      />
+    </>
   );
 }
