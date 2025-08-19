@@ -1,3 +1,3 @@
 export default function AboutPage() {
-  return <h1>copiar o readme dps</h1>;
+  return <h1>to do</h1>;
 }
