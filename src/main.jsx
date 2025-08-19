@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -13,6 +13,10 @@ import Settings from "./pages/Settings.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import NotFound from "./pages/NotFound.jsx";
+
+export default function RootRedirect() {
+  return <Navigate to="/login" replace />;
+}
 
 const theme = createTheme({
   palette: {
@@ -85,15 +89,22 @@ createRoot(document.getElementById("root")).render(
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
+              {/* Rota raiz redireciona para login */}
+              <Route index element={<RootRedirect />} />
+
+              {/* Rotas públicas */}
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="about" element={<AboutPage />} />
 
+              {/* Rotas protegidas */}
               <Route element={<ProtectedRoute />}>
-                <Route index element={<Workouts />} />
+                <Route path="workouts" element={<Workouts />} />
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
+
+              {/* Página 404 */}
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
