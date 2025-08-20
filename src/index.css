@@ -650,6 +650,23 @@ body {
     min-width: 120px;
     font-size: 0.875rem;
   }
+
+  /* Melhorias específicas para DraggableTabs no mobile */
+  .draggable-tabs-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .draggable-tab-item {
+    flex-shrink: 0;
+    touch-action: manipulation;
+  }
+
+  .drag-handle-mobile {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }
 
 /* Animações para entrada/saída */

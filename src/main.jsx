@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext.jsx";
+import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
@@ -14,8 +14,14 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import NotFound from "./pages/NotFound.jsx";
 
-export default function RootRedirect() {
-  return <Navigate to="/login" replace />;
+export function RootRedirect() {
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return null; // ou um spinner de loading se preferir
+  }
+
+  return <Navigate to={currentUser ? "/workouts" : "/login"} replace />;
 }
 
 const theme = createTheme({
