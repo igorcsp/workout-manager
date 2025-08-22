@@ -89,7 +89,6 @@ export default function DraggableTabs({
               top: 0,
               bottom: 0,
               width: 20,
-              background: "linear-gradient(to left, rgba(255,255,255,0.8), transparent)",
               pointerEvents: "none",
               zIndex: 1,
             } : {},
