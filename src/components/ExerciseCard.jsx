@@ -25,23 +25,27 @@ export default function ExerciseCard({
   onUpdate,
   onDelete,
   isDragging,
+  exerciseState,
+  onStateChange,
 }) {
-  const [completed, setCompleted] = useState(false);
-  const [currentSeries, setCurrentSeries] = useState(0);
-  const [completedSeries, setCompletedSeries] = useState([]);
-  const [timerActive, setTimerActive] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [timerKey, setTimerKey] = useState(0);
 
-  useEffect(() => {
-    resetExercise();
-  }, [exercise.id]);
+  // Estados vindos do localStorage via props
+  const {
+    completed = false,
+    currentSeries = 0,
+    completedSeries = [],
+    timerActive = false
+  } = exerciseState;
 
   const resetExercise = () => {
-    setCompleted(false);
-    setCurrentSeries(0);
-    setCompletedSeries([]);
-    setTimerActive(false);
+    onStateChange(exercise.id, {
+      completed: false,
+      currentSeries: 0,
+      completedSeries: [],
+      timerActive: false
+    });
     setTimerKey((prev) => prev + 1);
   };
 
@@ -51,14 +55,19 @@ export default function ExerciseCard({
     }
 
     const newCompletedSeries = [...completedSeries, index];
-    setCompletedSeries(newCompletedSeries);
 
     if (index < exercise.sets - 1) {
-      setTimerActive(true);
+      onStateChange(exercise.id, {
+        completedSeries: newCompletedSeries,
+        timerActive: true
+      });
       setTimerKey((prev) => prev + 1);
     } else {
-      setCompleted(true);
-      setTimerActive(false);
+      onStateChange(exercise.id, {
+        completedSeries: newCompletedSeries,
+        completed: true,
+        timerActive: false
+      });
     }
   };
 
@@ -66,11 +75,17 @@ export default function ExerciseCard({
     console.log("Timer expirou!");
     new Audio(sound).play();
     if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
-    setTimerActive(false);
 
     const nextSeries = currentSeries + 1;
     if (nextSeries < exercise.sets) {
-      setCurrentSeries(nextSeries);
+      onStateChange(exercise.id, {
+        timerActive: false,
+        currentSeries: nextSeries
+      });
+    } else {
+      onStateChange(exercise.id, {
+        timerActive: false
+      });
     }
   };
 
@@ -91,10 +106,12 @@ export default function ExerciseCard({
 
   const handleSwitchChange = (event) => {
     if (event.target.checked) {
-      setCompleted(true);
-      setCompletedSeries(Array.from({ length: exercise.sets }, (_, i) => i));
-      setCurrentSeries(exercise.sets - 1);
-      setTimerActive(false);
+      onStateChange(exercise.id, {
+        completed: true,
+        completedSeries: Array.from({ length: exercise.sets }, (_, i) => i),
+        currentSeries: exercise.sets - 1,
+        timerActive: false
+      });
     } else {
       resetExercise();
     }
