@@ -8,6 +8,8 @@ export default function DraggableExerciseList({
   onReorder,
   onUpdateExercise,
   onDeleteExercise,
+  getExerciseState,
+  onExerciseStateChange,
 }) {
   const handleDragEnd = (result) => {
     if (!result.destination) return;
@@ -50,6 +52,8 @@ export default function DraggableExerciseList({
                       onUpdate={onUpdateExercise}
                       onDelete={onDeleteExercise}
                       isDragging={snapshot.isDragging}
+                      exerciseState={getExerciseState(exercise.id)}
+                      onStateChange={onExerciseStateChange}
                     />
                   </Box>
                 )}
