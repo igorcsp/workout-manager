@@ -2,9 +2,13 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { IconButton } from "@mui/material";
+import { DarkMode as DarkModeIcon, LightMode as LightModeIcon } from "@mui/icons-material";
 
 export default function NavBar() {
   const { currentUser } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -51,6 +55,13 @@ export default function NavBar() {
             >
               Perfil
             </NavLink>
+            <IconButton 
+              onClick={toggleTheme} 
+              color="inherit"
+              title={isDarkMode ? "Modo Claro" : "Modo Escuro"}
+            >
+              {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
             <button
               onClick={handleLogout}
               className="logout-btn"
@@ -84,6 +95,13 @@ export default function NavBar() {
             >
               Cadastrar
             </NavLink>
+            <IconButton 
+              onClick={toggleTheme} 
+              color="inherit"
+              title={isDarkMode ? "Modo Claro" : "Modo Escuro"}
+            >
+              {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
           </>
         )}
       </div>

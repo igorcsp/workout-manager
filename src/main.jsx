@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+import { CustomThemeProvider } from "./context/ThemeContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
@@ -11,7 +12,6 @@ import Layout from "./components/Layout.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import Settings from "./pages/Settings.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import NotFound from "./pages/NotFound.jsx";
 
 export function RootRedirect() {
@@ -24,73 +24,9 @@ export function RootRedirect() {
   return <Navigate to={currentUser ? "/workouts" : "/login"} replace />;
 }
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#06345aff",
-      light: "#141a68ff",
-      dark: "#1976D2",
-    },
-    secondary: {
-      main: "#FF6B6B",
-      light: "#FF8E53",
-      dark: "#FF5722",
-    },
-    background: {
-      default: "#d4d4d4ff",
-      paper: "#cacacaff",
-    },
-  },
-  typography: {
-    fontFamily: '"Fira Sans Condensed", sans-serif',
-    h4: {
-      fontWeight: 600,
-      fontSize: "2rem",
-    },
-    h5: {
-      fontWeight: 600,
-    },
-    h6: {
-      fontWeight: 500,
-    },
-  },
-  shape: {
-    borderRadius: 12,
-  },
-  components: {
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.23)",
-          borderRadius: 12,
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-          fontWeight: 500,
-          borderRadius: 8,
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-          fontWeight: 500,
-          minHeight: 48,
-        },
-      },
-    },
-  },
-});
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <CustomThemeProvider>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
@@ -116,6 +52,6 @@ createRoot(document.getElementById("root")).render(
           </Routes>
         </BrowserRouter>
       </AuthProvider>
-    </ThemeProvider>
+    </CustomThemeProvider>
   </StrictMode>
 );

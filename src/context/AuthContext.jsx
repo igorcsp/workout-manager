@@ -1,6 +1,20 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase/config";
+import { 
+  onAuthStateChanged, 
+  signOut, 
+  deleteUser,
+  reauthenticateWithCredential,
+  EmailAuthProvider
+} from "firebase/auth";
+import { auth, db } from "../firebase/config";
+import { 
+  collection, 
+  query, 
+  where, 
+  getDocs, 
+  deleteDoc,
+  doc 
+} from "firebase/firestore";
 
 const AuthContext = createContext({});
 
@@ -36,10 +50,78 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
+  // Função para fazer logout
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      // Limpar dados locais
+      localStorage.clear();
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+      throw error;
+    }
+  };
+
+  // Função para deletar todos os dados do usuário no Firestore
+  const deleteUserData = async (userId) => {
+    try {
+      // Deletar todos os workouts do usuário
+      const workoutsQuery = query(
+        collection(db, "workouts"),
+        where("createdBy", "==", userId)
+      );
+      const workoutsSnapshot = await getDocs(workoutsQuery);
+      
+      const deletePromises = workoutsSnapshot.docs.map(docSnapshot => 
+        deleteDoc(doc(db, "workouts", docSnapshot.id))
+      );
+      
+      await Promise.all(deletePromises);
+      
+      // Limpar localStorage
+      localStorage.clear();
+      
+      console.log("Dados do usuário deletados com sucesso");
+    } catch (error) {
+      console.error("Erro ao deletar dados do usuário:", error);
+      throw error;
+    }
+  };
+
+  // Função para deletar conta
+  const deleteAccount = async (password) => {
+    if (!currentUser) {
+      throw new Error("Usuário não está logado");
+    }
+
+    try {
+      // Reautenticar o usuário antes de deletar
+      const credential = EmailAuthProvider.credential(
+        currentUser.email,
+        password
+      );
+      
+      await reauthenticateWithCredential(currentUser, credential);
+      
+      // Deletar dados do Firestore
+      await deleteUserData(currentUser.uid);
+      
+      // Deletar conta do Firebase Auth
+      await deleteUser(currentUser);
+      
+      console.log("Conta deletada com sucesso");
+    } catch (error) {
+      console.error("Erro ao deletar conta:", error);
+      throw error;
+    }
+  };
+
   const value = {
     currentUser,
     loading,
     error,
+    logout,
+    deleteAccount,
   };
 
   return (
