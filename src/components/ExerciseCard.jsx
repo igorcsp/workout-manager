@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -184,7 +184,7 @@ export default function ExerciseCard({
               Séries:
             </Typography>
             {Array.from({ length: exercise.sets || 1 }).map((_, i) => {
-              const isCompleted = completedSeries.includes(i);
+              const isCompleted = Array.isArray(completedSeries) && completedSeries.includes(i);
               const isCurrent = i === currentSeries;
               const isDisabled = i > currentSeries || timerActive || completed;
 

@@ -32,10 +32,12 @@ import {
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useExerciseStates } from '../hooks/useExerciseStates';
 
 export default function Settings() {
   const { isDarkMode, toggleTheme } = useTheme();
   const { currentUser, logout, deleteAccount } = useAuth();
+  const { clearCorruptedData } = useExerciseStates();
   const navigate = useNavigate();
   
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -50,8 +52,8 @@ export default function Settings() {
       setLoading(true);
       await logout();
       navigate('/login');
-    } catch (error) {
-      setError('Erro ao fazer logout. Tente novamente.');
+    } catch (err) {
+      setError('Erro ao fazer logout. Tente novamente.', err);
     } finally {
       setLoading(false);
     }
@@ -90,6 +92,14 @@ export default function Settings() {
     setDeleteDialogOpen(false);
     setPassword('');
     setError('');
+  };
+
+  const handleClearData = () => {
+    if (window.confirm('Tem certeza que deseja limpar todos os dados de progresso dos treinos? Esta ação não pode ser desfeita.')) {
+      clearCorruptedData();
+      setSnackbarMessage('Dados de progresso limpos com sucesso!');
+      setSnackbarOpen(true);
+    }
   };
 
   return (
@@ -145,6 +155,34 @@ export default function Settings() {
                   }
                   label=""
                 />
+              </ListItem>
+            </List>
+          </CardContent>
+        </Card>
+
+        {/* Dados e Manutenção */}
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Dados e Manutenção
+            </Typography>
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <DeleteIcon color="warning" />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Limpar Dados de Progresso" 
+                  secondary="Remove o progresso de todos os treinos (checkboxes, timers, etc.)"
+                />
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  onClick={handleClearData}
+                  disabled={loading}
+                >
+                  Limpar
+                </Button>
               </ListItem>
             </List>
           </CardContent>

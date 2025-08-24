@@ -5,7 +5,6 @@ import {
   Typography,
   Fab,
   Alert,
-  IconButton,
   Stack,
 } from "@mui/material";
 import { Add as AddIcon, Settings as SettingsIcon } from "@mui/icons-material";
@@ -19,10 +18,8 @@ import EmptyWorkoutState from "../components/EmptyWorkoutState";
 import WorkoutEditDialog from "../components/WorkoutEditDialog";
 import FinishWorkoutButton from "../components/FinishWorkoutButton";
 import Loader from "./Loader";
-import { useNavigate } from "react-router-dom";
 
 export default function Workouts() {
-  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const {
     workouts,
@@ -156,16 +153,6 @@ export default function Workouts() {
     resetWorkoutStates();
   };
 
-  const settings = (
-    <Box display="flex" justifyContent="right">
-      <Box display="flex" alignItems="center" gap={2}>
-        <IconButton onClick={() => navigate("/settings")}>
-          <SettingsIcon />
-        </IconButton>
-      </Box>
-    </Box>
-  );
-
   if (loading) {
     return <Loader />;
   }
@@ -173,7 +160,6 @@ export default function Workouts() {
   if (workouts.length === 0) {
     return (
       <>
-        {settings}
         <Container maxWidth="lg">
           <Box py={4}>
             <Typography variant="h4" gutterBottom>
@@ -195,7 +181,6 @@ export default function Workouts() {
 
   return (
     <>
-      {settings}
 
       <Container maxWidth="lg">
         <Box py={4}>

@@ -4,7 +4,10 @@ import { auth } from "../firebase/config";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { IconButton } from "@mui/material";
-import { DarkMode as DarkModeIcon, LightMode as LightModeIcon } from "@mui/icons-material";
+import {
+  DarkMode as DarkModeIcon,
+  LightMode as LightModeIcon,
+} from "@mui/icons-material";
 
 export default function NavBar() {
   const { currentUser } = useAuth();
@@ -55,17 +58,23 @@ export default function NavBar() {
             >
               Perfil
             </NavLink>
-            <IconButton 
-              onClick={toggleTheme} 
+            <NavLink
+              to="/settings"
+              className={({ isActive, isPending }) =>
+                isPending ? "pending" : isActive ? "active" : ""
+              }
+            >
+              Configurações
+            </NavLink>
+
+            <IconButton
+              onClick={toggleTheme}
               color="inherit"
               title={isDarkMode ? "Modo Claro" : "Modo Escuro"}
             >
               {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
-            <button
-              onClick={handleLogout}
-              className="logout-btn"
-            >
+            <button onClick={handleLogout} className="logout-btn">
               Sair
             </button>
           </>
@@ -95,8 +104,8 @@ export default function NavBar() {
             >
               Cadastrar
             </NavLink>
-            <IconButton 
-              onClick={toggleTheme} 
+            <IconButton
+              onClick={toggleTheme}
               color="inherit"
               title={isDarkMode ? "Modo Claro" : "Modo Escuro"}
             >

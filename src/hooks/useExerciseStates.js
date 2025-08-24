@@ -13,12 +13,32 @@ export const useExerciseStates = (workoutId) => {
     try {
       const savedStates = localStorage.getItem(storageKey);
       if (savedStates) {
-        setExerciseStates(JSON.parse(savedStates));
+        const parsedStates = JSON.parse(savedStates);
+        
+        // Validar e limpar dados corrompidos
+        const validatedStates = {};
+        Object.keys(parsedStates).forEach(exerciseId => {
+          const state = parsedStates[exerciseId];
+          if (state && typeof state === 'object') {
+            validatedStates[exerciseId] = {
+              completed: Boolean(state.completed),
+              currentSeries: Number(state.currentSeries) || 0,
+              completedSeries: Array.isArray(state.completedSeries) ? state.completedSeries : [],
+              timerActive: Boolean(state.timerActive),
+              timerStartTime: state.timerStartTime || null,
+              timerDuration: state.timerDuration || null
+            };
+          }
+        });
+        
+        setExerciseStates(validatedStates);
       } else {
         setExerciseStates({});
       }
     } catch (error) {
       console.error("Erro ao carregar estados do localStorage:", error);
+      // Limpar dados corrompidos
+      localStorage.removeItem(storageKey);
       setExerciseStates({});
     }
   }, [workoutId, storageKey]);
@@ -53,13 +73,16 @@ export const useExerciseStates = (workoutId) => {
 
   // Função para obter o estado de um exercício específico
   const getExerciseState = useCallback((exerciseId) => {
-    return exerciseStates[exerciseId] || {
-      completed: false,
-      currentSeries: 0,
-      completedSeries: [],
-      timerActive: false,
-      timerStartTime: null,
-      timerDuration: null
+    const state = exerciseStates[exerciseId];
+    
+    // Garantir que sempre retornamos valores válidos
+    return {
+      completed: Boolean(state?.completed),
+      currentSeries: Number(state?.currentSeries) || 0,
+      completedSeries: Array.isArray(state?.completedSeries) ? state.completedSeries : [],
+      timerActive: Boolean(state?.timerActive),
+      timerStartTime: state?.timerStartTime || null,
+      timerDuration: state?.timerDuration || null
     };
   }, [exerciseStates]);
 
@@ -84,11 +107,29 @@ export const useExerciseStates = (workoutId) => {
     });
   }, []);
 
+  // Função para limpar todos os dados corrompidos
+  const clearCorruptedData = useCallback(() => {
+    try {
+      // Limpar todos os dados de workout do localStorage
+      const keys = Object.keys(localStorage);
+      keys.forEach(key => {
+        if (key.startsWith('workout-states-') || key.startsWith('timer-')) {
+          localStorage.removeItem(key);
+        }
+      });
+      setExerciseStates({});
+      console.log('Dados corrompidos limpos com sucesso');
+    } catch (error) {
+      console.error('Erro ao limpar dados corrompidos:', error);
+    }
+  }, []);
+
   return {
     updateExerciseState,
     getExerciseState,
     resetWorkoutStates,
     resetExerciseState,
+    clearCorruptedData,
     exerciseStates
   };
 };
