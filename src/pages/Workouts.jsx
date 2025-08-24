@@ -10,12 +10,14 @@ import {
 } from "@mui/material";
 import { Add as AddIcon, Settings as SettingsIcon } from "@mui/icons-material";
 import { useWorkouts } from "../hooks/useWorkouts";
+import { useExerciseStates } from "../hooks/useExerciseStates";
 import { useAuth } from "../context/AuthContext";
 import DraggableTabs from "../components/DraggableTabs";
 import DraggableExerciseList from "../components/DraggableExerciseList";
 import WorkoutHeader from "../components/WorkoutHeader";
 import EmptyWorkoutState from "../components/EmptyWorkoutState";
 import WorkoutEditDialog from "../components/WorkoutEditDialog";
+import FinishWorkoutButton from "../components/FinishWorkoutButton";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
 
@@ -38,6 +40,14 @@ export default function Workouts() {
   const [activeTab, setActiveTab] = useState(0);
   const [newWorkoutDialogOpen, setNewWorkoutDialogOpen] = useState(false);
   const [error, setError] = useState("");
+
+  // Hook para gerenciar estados dos exercícios
+  const currentWorkout = workouts[activeTab];
+  const {
+    updateExerciseState,
+    getExerciseState,
+    resetWorkoutStates,
+  } = useExerciseStates(currentWorkout?.id);
 
   // Ajustar activeTab quando workouts mudam
   useEffect(() => {
@@ -142,6 +152,10 @@ export default function Workouts() {
     }
   };
 
+  const handleFinishWorkout = () => {
+    resetWorkoutStates();
+  };
+
   const settings = (
     <Box display="flex" justifyContent="right">
       <Box display="flex" alignItems="center" gap={2}>
@@ -178,8 +192,6 @@ export default function Workouts() {
       </>
     );
   }
-
-  const currentWorkout = workouts[activeTab];
 
   return (
     <>
@@ -228,13 +240,20 @@ export default function Workouts() {
               />
 
               {currentWorkout.exercises?.length > 0 ? (
-                <DraggableExerciseList
-                  exercises={currentWorkout.exercises}
-                  workoutId={currentWorkout.id}
-                  onReorder={handleReorderExercises}
-                  onUpdateExercise={handleUpdateExercise}
-                  onDeleteExercise={handleDeleteExercise}
-                />
+                <>
+                  <DraggableExerciseList
+                    exercises={currentWorkout.exercises}
+                    workoutId={currentWorkout.id}
+                    onReorder={handleReorderExercises}
+                    onUpdateExercise={handleUpdateExercise}
+                    onDeleteExercise={handleDeleteExercise}
+                    getExerciseState={getExerciseState}
+                    onExerciseStateChange={updateExerciseState}
+                  />
+                  <FinishWorkoutButton
+                    onFinishWorkout={handleFinishWorkout}
+                  />
+                </>
               ) : (
                 <Box
                   display="flex"
