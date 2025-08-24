@@ -44,7 +44,9 @@ export default function ExerciseCard({
       completed: false,
       currentSeries: 0,
       completedSeries: [],
-      timerActive: false
+      timerActive: false,
+      timerStartTime: null,
+      timerDuration: null
     });
     setTimerKey((prev) => prev + 1);
   };
@@ -57,16 +59,21 @@ export default function ExerciseCard({
     const newCompletedSeries = [...completedSeries, index];
 
     if (index < exercise.sets - 1) {
+      const now = Date.now();
       onStateChange(exercise.id, {
         completedSeries: newCompletedSeries,
-        timerActive: true
+        timerActive: true,
+        timerStartTime: now,
+        timerDuration: exercise.rest || 60
       });
       setTimerKey((prev) => prev + 1);
     } else {
       onStateChange(exercise.id, {
         completedSeries: newCompletedSeries,
         completed: true,
-        timerActive: false
+        timerActive: false,
+        timerStartTime: null,
+        timerDuration: null
       });
     }
   };
@@ -80,11 +87,15 @@ export default function ExerciseCard({
     if (nextSeries < exercise.sets) {
       onStateChange(exercise.id, {
         timerActive: false,
+        timerStartTime: null,
+        timerDuration: null,
         currentSeries: nextSeries
       });
     } else {
       onStateChange(exercise.id, {
-        timerActive: false
+        timerActive: false,
+        timerStartTime: null,
+        timerDuration: null
       });
     }
   };
@@ -110,7 +121,9 @@ export default function ExerciseCard({
         completed: true,
         completedSeries: Array.from({ length: exercise.sets }, (_, i) => i),
         currentSeries: exercise.sets - 1,
-        timerActive: false
+        timerActive: false,
+        timerStartTime: null,
+        timerDuration: null
       });
     } else {
       resetExercise();
@@ -227,6 +240,7 @@ export default function ExerciseCard({
               <Typography variant="body2">Descanso:</Typography>
               <Timer
                 key={`${exercise.id}-${timerKey}`}
+                exerciseId={exercise.id}
                 restTime={exercise.rest || 60}
                 onExpire={handleTimerExpire}
                 autoStart={timerActive}

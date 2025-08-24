@@ -43,6 +43,8 @@ export const useExerciseStates = (workoutId) => {
         currentSeries: 0,
         completedSeries: [],
         timerActive: false,
+        timerStartTime: null,
+        timerDuration: null,
         ...prev[exerciseId],
         ...newState
       }
@@ -55,7 +57,9 @@ export const useExerciseStates = (workoutId) => {
       completed: false,
       currentSeries: 0,
       completedSeries: [],
-      timerActive: false
+      timerActive: false,
+      timerStartTime: null,
+      timerDuration: null
     };
   }, [exerciseStates]);
 
