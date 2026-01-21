@@ -10,7 +10,6 @@ import {
 import { Add as AddIcon, Settings as SettingsIcon } from "@mui/icons-material";
 import { useWorkouts } from "../hooks/useWorkouts";
 import { useExerciseStates } from "../hooks/useExerciseStates";
-import { useAuth } from "../context/AuthContext";
 import DraggableTabs from "../components/DraggableTabs";
 import DraggableExerciseList from "../components/DraggableExerciseList";
 import WorkoutHeader from "../components/WorkoutHeader";
@@ -20,7 +19,6 @@ import FinishWorkoutButton from "../components/FinishWorkoutButton";
 import Loader from "./Loader";
 
 export default function Workouts() {
-  const { currentUser } = useAuth();
   const {
     workouts,
     loading,
@@ -162,9 +160,6 @@ export default function Workouts() {
       <>
         <Container maxWidth="lg">
           <Box py={4}>
-            <Typography variant="h4" gutterBottom>
-              Bem-vindo, {currentUser?.name?.split(" ")[0]}!
-            </Typography>
             <EmptyWorkoutState
               onCreateWorkout={() => setNewWorkoutDialogOpen(true)}
             />
@@ -184,10 +179,6 @@ export default function Workouts() {
 
       <Container maxWidth="lg">
         <Box py={4}>
-          <Typography variant="h4" gutterBottom>
-            Bem-vindo, {currentUser?.name?.split(" ")[0]}!
-          </Typography>
-
           <Stack
             direction="row"
             alignItems="center"
